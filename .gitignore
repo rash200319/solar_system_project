@@ -1,5 +1,6 @@
-.vs/
 node_modules/
 dist/
 build/
+.vs/
 .env
+*.log
