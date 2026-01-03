@@ -461,22 +461,27 @@ const UIStyles = () => (
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap');
     
     body { 
-      margin: 0; font-family: 'Rajdhani', sans-serif; overflow: hidden; overscroll-behavior: none; user-select: none; -webkit-user-select: none;
+      margin: 0; font-family: 'Rajdhani', sans-serif; overflow: hidden; 
+      overscroll-behavior: none; user-select: none; -webkit-user-select: none;
     }
 
-    /* --- DESKTOP STYLES (Unchanged) --- */
+    /* --- DESKTOP BASE STYLES --- */
     .hud-panel {
       background: rgba(10, 10, 15, 0.6); backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 0 20px rgba(0,0,0,0.5);
-      border-left: 3px solid #00ffff; padding: 20px; border-radius: 4px; color: white; text-transform: uppercase;
+      border: 1px solid rgba(255, 255, 255, 0.1); 
+      border-left: 3px solid #00ffff; padding: 20px; border-radius: 4px; color: white;
+      transition: opacity 0.3s ease, transform 0.3s ease;
     }
+    
+    /* Hide element class */
+    .hidden { opacity: 0; pointer-events: none; transform: translateY(-20px); }
 
     .planet-panel {
       background: rgba(10, 10, 15, 0.95); backdrop-filter: blur(20px);
       border-left: 1px solid rgba(255, 255, 255, 0.1); 
       border-right: 3px solid #ff0055; padding: 30px; color: white;
       position: absolute; right: 0; top: 0; bottom: 0; width: 350px;
-      transform: translateX(100%); transition: transform 0.3s ease-out;
+      transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
       display: flex; flex-direction: column; z-index: 50;
       overflow-y: auto;
     }
@@ -484,8 +489,10 @@ const UIStyles = () => (
 
     .controls-container {
       position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
-      display: flex; gap: 20px; alignItems: flex-end; pointer-events: auto; width: auto; z-index: 40;
+      display: flex; gap: 20px; alignItems: flex-end; width: auto; z-index: 40;
+      transition: opacity 0.3s ease;
     }
+
     .controls-inner {
       display: flex; gap: 30px; padding: 15px 30px; border-radius: 40px; align-items: center;
     }
@@ -500,7 +507,7 @@ const UIStyles = () => (
     .data-label { color: #888; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
     .data-val { font-family: 'Orbitron'; color: white; font-size: 14px; }
 
-    /* Inputs */
+    /* Inputs & Buttons */
     input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; margin: 10px 0; }
     input[type=range]:focus { outline: none; }
     input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: rgba(255,255,255,0.2); border-radius: 2px; }
@@ -524,59 +531,49 @@ const UIStyles = () => (
     }
     .control-group { display: flex; flex-direction: column; gap: 5px; min-width: 100px; }
     .label-control { font-size: 9px; color: #aaa; letter-spacing: 1px; font-weight: bold;}
-
-    /* Close Button (Hidden on Desktop) */
     .close-btn { display: none; }
 
-    /* --- MOBILE STYLES (THE FIX) --- */
+    /* --- MOBILE FIXES --- */
     @media (max-width: 768px) {
-      /* 1. Simplify Top Left Panel */
+      /* 1. Fix Top Left Panel Cutoff */
       .hud-panel.top-left {
-        top: 15px !important; left: 15px !important; width: auto !important;
-        padding: 10px 15px !important;
-        background: rgba(0,0,0,0.5) !important;
+        top: 15px !important; left: 15px !important; 
+        width: auto !important; max-width: 60vw; /* Prevent screen overflow */
+        padding: 8px 15px !important;
+        background: rgba(0,0,0,0.6) !important;
         border: none !important; border-left: 2px solid #00ffff !important;
       }
-      .hud-panel.top-left .desc-text, .hud-panel.top-left .title-small { display: none; }
-      .stat-value { font-size: 16px; margin: 0; }
+      .hud-panel.top-left .desc-text { display: none; } /* Hide description on mobile */
+      .hud-panel.top-left .title-small { font-size: 9px; margin-bottom: 2px; }
+      .stat-value { font-size: 18px; }
 
-      /* 2. Hide Instructions */
-      .instructions { display: none; }
-
-      /* 3. Planet Panel - Bottom Overlay */
+      /* 2. Planet Panel - Bottom Overlay */
       .planet-panel {
-        width: 100% !important; height: auto !important; max-height: 70vh;
+        width: 100% !important; height: auto !important; max-height: 60vh;
         right: 0; left: 0; top: auto; bottom: 0;
         border-right: none; border-top: 2px solid #ff0055;
         border-radius: 20px 20px 0 0;
         transform: translateY(110%);
-        padding: 20px 25px 40px 25px; /* Extra padding at bottom for safe area */
-        box-shadow: 0 -10px 40px rgba(0,0,0,0.8);
+        padding: 20px 25px 40px 25px;
+        box-shadow: 0 -10px 50px rgba(0,0,0,0.9);
       }
       .planet-panel.active { transform: translateY(0); }
 
-      /* 4. Controls - Stick to bottom, full width */
-      .controls-container {
-        width: 90%; bottom: 30px; 
-        transition: opacity 0.3s;
-      }
-      /* Hide controls when planet panel is open */
-      .controls-hidden { opacity: 0; pointer-events: none; }
-
+      /* 3. Controls - Stick to bottom */
+      .controls-container { width: 90%; bottom: 30px; }
+      
       .controls-inner {
         flex-direction: column; align-items: stretch; gap: 15px; padding: 20px;
-        background: rgba(10, 10, 15, 0.85); backdrop-filter: blur(15px);
+        background: rgba(10, 10, 15, 0.9); backdrop-filter: blur(15px);
         border: 1px solid rgba(255,255,255,0.1);
       }
-      
       .control-row-1 { display: flex; gap: 15px; }
       .control-row-2 { display: flex; justify-content: space-between; align-items: center; margin-top: 5px;}
 
-      /* 5. Close Button for Mobile Panel */
       .close-btn {
         display: block; position: absolute; top: 15px; right: 15px;
         background: rgba(255,255,255,0.1); border: none; color: white;
-        width: 30px; height: 30px; border-radius: 50%; font-size: 18px; line-height: 1; cursor: pointer;
+        width: 32px; height: 32px; border-radius: 50%; font-size: 18px; line-height: 1; cursor: pointer; z-index: 60;
       }
     }
   `}</style>
@@ -588,6 +585,8 @@ const UIStyles = () => (
 
 // --- UPDATED APP ---
 // ... (Keep imports and physics functions) ...
+
+// ... keep imports ...
 
 export default function App() {
   const [mass, setMass] = useState(1);
@@ -626,36 +625,33 @@ export default function App() {
   const toggleTime = () => setIsPlaying(!isPlaying);
   
   const reset = () => { 
-      setIsPlaying(false); 
-      setAge(0); 
-      setExploded(false); 
-      setFocusTarget(null); 
-      setSelectedPlanet(null);
+      setIsPlaying(false); setAge(0); setExploded(false); 
+      setFocusTarget(null); setSelectedPlanet(null);
       controlsRef.current?.reset(); 
       setResetKey(prev => prev + 1);
   };
 
   const handleBackgroundClick = (e) => {
-    setFocusTarget(null);
-    setSelectedPlanet(null);
+    setFocusTarget(null); setSelectedPlanet(null);
     controlsRef.current?.reset();
   };
 
-  // Explicit Close function for the X button
   const closePanel = (e) => {
-      e.stopPropagation(); // Stop click from hitting background
-      setFocusTarget(null);
-      setSelectedPlanet(null);
+      e.stopPropagation();
+      setFocusTarget(null); setSelectedPlanet(null);
       controlsRef.current?.reset();
   }
+
+  // Helper: Should we hide the main UI? (Yes if on mobile AND a planet is selected)
+  const isCleanMode = isMobile && selectedPlanet;
 
   return (
     <div style={{ width: '100vw', height: '100vh', background: 'black', position: 'relative' }}>
       <UIStyles />
       <div style={{ position: 'absolute', zIndex: 10, width: '100%', height: '100%', pointerEvents: 'none' }}>
         
-        {/* SYSTEM STATUS (Simplified for Mobile) */}
-        <div className="hud-panel top-left" style={{ position: 'absolute', top: 30, left: 30, width: 280 }}>
+        {/* SYSTEM STATUS (Removed 'width: 280' and added logic to hide in CleanMode) */}
+        <div className={`hud-panel top-left ${isCleanMode ? 'hidden' : ''}`} style={{ position: 'absolute' }}>
           <div className="title-small">SYSTEM STATUS</div>
           <div className="stat-value" style={{ color: starStats.color, textShadow: `0 0 15px ${starStats.color}` }}>
             {starStats.stage}
@@ -670,7 +666,6 @@ export default function App() {
         </div>
 
         {/* PLANET INFO PANEL */}
-        {/* Added "pointer-events: auto" to ensure the panel receives clicks */}
         <div className={`planet-panel ${selectedPlanet ? 'active' : ''}`} style={{ pointerEvents: 'auto' }}>
              {selectedPlanet && (
                  <>
@@ -701,9 +696,9 @@ export default function App() {
              )}
         </div>
 
-        {/* CONTROLS (Hidden when planet selected on mobile) */}
-        <div className={`controls-container ${isMobile && selectedPlanet ? 'controls-hidden' : ''}`}>
-          <div className="hud-panel controls-inner">
+        {/* CONTROLS (Hidden in CleanMode) */}
+        <div className={`controls-container ${isCleanMode ? 'hidden' : ''}`}>
+          <div className="hud-panel controls-inner" style={{ pointerEvents: 'auto' }}>
             
             {/* Row 1: Sliders */}
             <div className="control-row-1" style={{ width: '100%', display: 'flex', gap: '20px', flex: 1 }}>
