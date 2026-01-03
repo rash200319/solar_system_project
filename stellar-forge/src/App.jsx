@@ -1,4 +1,4 @@
-﻿import { useState, useRef, useEffect, useMemo, Suspense } from 'react'
+import { useState, useRef, useEffect, useMemo, Suspense } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { OrbitControls, Stars, CameraShake, Html, useTexture } from '@react-three/drei'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
@@ -459,12 +459,23 @@ function Shockwave({ exploded }) {
 const UIStyles = () => (
   <style>{`
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap');
-    body { margin: 0; font-family: 'Rajdhani', sans-serif; overflow: hidden; }
+    
+    body { 
+      margin: 0; 
+      font-family: 'Rajdhani', sans-serif; 
+      overflow: hidden; 
+      /* Prevents pull-to-refresh on mobile */
+      overscroll-behavior: none;
+    }
+
+    /* --- DESKTOP DEFAULTS --- */
     .hud-panel {
       background: rgba(10, 10, 15, 0.6); backdrop-filter: blur(12px);
       border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 0 20px rgba(0,0,0,0.5);
       border-left: 3px solid #00ffff; padding: 20px; border-radius: 4px; color: white; text-transform: uppercase;
     }
+
+    /* Planet Detail Panel (Desktop: Right Side) */
     .planet-panel {
       background: rgba(10, 10, 15, 0.85); backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: -5px 0 20px rgba(0,0,0,0.7);
@@ -472,26 +483,39 @@ const UIStyles = () => (
       position: absolute; right: 0; top: 0; bottom: 0; width: 300px;
       transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       display: flex; flex-direction: column; z-index: 20;
+      overflow-y: auto; /* Allow scroll if content is tall */
     }
     .planet-panel.active { transform: translateX(0); }
-    
+
+    /* Controls Container */
+    .controls-container {
+      position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 20px; alignItems: flex-end; pointer-events: auto; width: auto;
+    }
+    .controls-inner {
+      display: flex; gap: 30px; padding: 15px 30px; border-radius: 40px; align-items: center;
+    }
+
+    /* Typography & Elements */
     .title-small { font-family: 'Orbitron', sans-serif; font-size: 10px; color: #00ffff; letter-spacing: 2px; margin-bottom: 5px; opacity: 0.8; }
     .stat-value { font-family: 'Orbitron', sans-serif; font-size: 24px; font-weight: 700; }
     .planet-title { font-family: 'Orbitron', sans-serif; font-size: 32px; font-weight: 700; color: #ff0055; text-shadow: 0 0 10px rgba(255, 0, 85, 0.4); margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
-    
     .desc-text { font-size: 13px; line-height: 1.4; color: #aaa; margin-top: 8px; white-space: pre-wrap; padding-top: 8px;}
+    
     .data-row { display: flex; justify-content: space-between; margin-top: 15px; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 5px; }
     .data-label { color: #888; font-size: 12px; letter-spacing: 1px; }
     .data-val { font-family: 'Orbitron'; color: white; font-size: 14px; }
 
+    /* Inputs & Buttons */
     input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; margin: 10px 0; }
     input[type=range]:focus { outline: none; }
     input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 2px; cursor: pointer; background: rgba(255,255,255,0.2); }
     input[type=range]::-webkit-slider-thumb { height: 14px; width: 14px; border-radius: 50%; background: #00ffff; cursor: pointer; -webkit-appearance: none; margin-top: -6px; box-shadow: 0 0 10px #00ffff; }
+    
     .btn-control {
       background: transparent; border: 1px solid rgba(255,255,255,0.3); color: white;
       width: 40px; height: 40px; border-radius: 50%; cursor: pointer;
-      display: flex; align-items: center; justify-content: center; font-size: 14px; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center; font-size: 14px; transition: all 0.2s; flex-shrink: 0;
     }
     .btn-control:hover { background: rgba(255,255,255,0.1); border-color: white; }
     .btn-active { background: #00ffff; color: black; border-color: #00ffff; box-shadow: 0 0 15px rgba(0,255,255,0.4); }
@@ -499,19 +523,59 @@ const UIStyles = () => (
     .btn-danger {
       background: linear-gradient(90deg, #aa0000, #ff0000); border: none; color: white;
       padding: 0 25px; height: 40px; border-radius: 20px; font-family: 'Orbitron', sans-serif;
-      font-weight: bold; cursor: pointer; letter-spacing: 1px; box-shadow: 0 0 10px rgba(255, 0, 0, 0.4); transition: transform 0.1s;
+      font-weight: bold; cursor: pointer; letter-spacing: 1px; box-shadow: 0 0 10px rgba(255, 0, 0, 0.4); transition: transform 0.1s; white-space: nowrap;
     }
     .btn-danger:active { transform: scale(0.95); }
+    
     .planet-label {
       color: #00ffff; font-family: 'Orbitron'; font-size: 10px; text-shadow: 0 0 5px black;
       padding: 4px 8px; background: rgba(0,0,0,0.7); border: 1px solid #00ffff; border-radius: 4px; transform: translateY(-20px);
     }
     .control-group { display: flex; flex-direction: column; gap: 5px; min-width: 120px; }
     .label-control { font-size: 10px; color: #888; letter-spacing: 1px; }
+
+    /* --- MOBILE & RESPONSIVE TWEAKS --- */
+    @media (max-width: 768px) {
+      /* Top Left HUD */
+      .hud-panel.top-left {
+        top: 10px !important; left: 10px !important; width: auto !important; right: 10px;
+        padding: 15px;
+      }
+      .hud-panel.top-left .desc-text { display: none; } /* Hide detailed text on mobile to save space */
+      
+      /* Instructions */
+      .instructions { display: none; }
+
+      /* Planet Panel (Becomes Bottom Sheet) */
+      .planet-panel {
+        width: 100% !important; height: 50vh;
+        right: 0; left: 0; top: auto; bottom: 0;
+        border-right: none; border-top: 3px solid #ff0055;
+        transform: translateY(110%);
+        border-radius: 20px 20px 0 0;
+      }
+      .planet-panel.active { transform: translateY(0); }
+
+      /* Bottom Controls */
+      .controls-container {
+        width: 95%; bottom: 20px;
+      }
+      .controls-inner {
+        flex-wrap: wrap; justify-content: center; gap: 15px; padding: 15px;
+        background: rgba(10, 10, 15, 0.9);
+      }
+      .control-group { min-width: 40%; flex: 1; }
+      .btn-danger { padding: 0 15px; font-size: 12px; }
+      .btn-reset { display: none; } /* Hide reset on small screens if crowded */
+    }
   `}</style>
 )
 
 // --- MAIN APP ---
+// ... keep your imports ... 
+// ... keep all physics, planet, and star functions exactly as they are ...
+
+// --- UPDATED APP ---
 export default function App() {
   const [mass, setMass] = useState(1);
   const [age, setAge] = useState(0);
@@ -519,9 +583,19 @@ export default function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   
   const [focusTarget, setFocusTarget] = useState(null);
-  const [selectedPlanet, setSelectedPlanet] = useState(null); // NEW: Track selected planet data
+  const [selectedPlanet, setSelectedPlanet] = useState(null);
   const [resetKey, setResetKey] = useState(0); 
   
+  // Mobile Detection
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile(); // Check on mount
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   const controlsRef = useRef();
   const starStats = useStarPhysics(mass, age);
 
@@ -559,8 +633,8 @@ export default function App() {
       <UIStyles />
       <div style={{ position: 'absolute', zIndex: 10, width: '100%', height: '100%', pointerEvents: 'none' }}>
         
-        {/* INFO PANEL (LEFT) */}
-        <div className="hud-panel" style={{ position: 'absolute', top: 30, left: 30, width: 280 }}>
+        {/* INFO PANEL (LEFT) - Added class "top-left" */}
+        <div className="hud-panel top-left" style={{ position: 'absolute', top: 30, left: 30, width: 280 }}>
           <div className="title-small">SYSTEM STATUS // v3.0</div>
           <div className="stat-value" style={{ color: starStats.color, textShadow: `0 0 15px ${starStats.color}` }}>
             {starStats.stage}
@@ -568,16 +642,17 @@ export default function App() {
           <div className="desc-text" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>{starStats.description}</div>
         </div>
 
-        {/* INSTRUCTIONS (RIGHT) - Hidden when planet is selected */}
-        <div style={{ position: 'absolute', top: 30, right: 30, textAlign: 'right', opacity: selectedPlanet ? 0 : 0.6, transition: 'opacity 0.5s' }}>
+        {/* INSTRUCTIONS (RIGHT) - Added class "instructions" */}
+        <div className="instructions" style={{ position: 'absolute', top: 30, right: 30, textAlign: 'right', opacity: selectedPlanet ? 0 : 0.6, transition: 'opacity 0.5s' }}>
           <div className="title-small" style={{ color: 'white' }}>INSTRUCTIONS</div>
           <div style={{ fontSize: '12px', color: '#ccc' }}>Click Planet to Focus<br/>Click Background to Reset View</div>
         </div>
 
-        {/* PLANET DETAILS SLIDE-OUT PANEL (RIGHT) */}
+        {/* PLANET DETAILS SLIDE-OUT PANEL */}
         <div className={`planet-panel ${selectedPlanet ? 'active' : ''}`}>
              {selectedPlanet && (
                  <>
+                    {/* On mobile, we add a close button/handle implicitly by clicking background, but visually: */}
                     <div className="title-small">PLANETARY DATABASE</div>
                     <div className="planet-title">{selectedPlanet.name}</div>
                     <div className="desc-text">{selectedPlanet.desc}</div>
@@ -604,9 +679,9 @@ export default function App() {
              )}
         </div>
 
-        {/* CONTROLS (BOTTOM) */}
-        <div style={{ position: 'absolute', bottom: 30, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: '20px', alignItems: 'flex-end', pointerEvents: 'auto' }}>
-          <div className="hud-panel" style={{ display: 'flex', gap: '30px', padding: '15px 30px', borderRadius: '40px', alignItems: 'center' }}>
+        {/* CONTROLS (BOTTOM) - Updated classes for flex wrapping */}
+        <div className="controls-container">
+          <div className="hud-panel controls-inner">
             
             <div className="control-group">
               <div className="label-control">STAR MASS (M☉)</div>
@@ -624,27 +699,40 @@ export default function App() {
               </div>
             </div>
 
-            <div style={{ height: '30px', width: '1px', background: 'rgba(255,255,255,0.2)' }}></div>
+            {/* Separator - Hidden on mobile via Flex wrap usually works better than hiding */}
+            <div style={{ height: '30px', width: '1px', background: 'rgba(255,255,255,0.2)', display: isMobile ? 'none' : 'block' }}></div>
             
-            <button className={`btn-control ${isPlaying ? 'btn-active' : ''}`} onClick={toggleTime} title="Play/Pause">
-              {isPlaying ? '⏸' : '▶'}
-            </button>
-            <button className="btn-control btn-reset" onClick={reset} title="Reset Solar System">RESET</button>
-            <button className="btn-danger" onClick={triggerDeath}>DETONATE</button>
+            <div style={{ display: 'flex', gap: '10px' }}>
+                <button className={`btn-control ${isPlaying ? 'btn-active' : ''}`} onClick={toggleTime} title="Play/Pause">
+                {isPlaying ? '⏸' : '▶'}
+                </button>
+                <button className="btn-control btn-reset" onClick={reset} title="Reset Solar System">RESET</button>
+                <button className="btn-danger" onClick={triggerDeath}>DETONATE</button>
+            </div>
 
           </div>
         </div>
       </div>
 
-      <Canvas shadows camera={{ position: [0, 25, 40], fov: 45 }} onPointerMissed={handleBackgroundClick}> 
-        <OrbitControls ref={controlsRef} minDistance={5} maxDistance={150} />
+      {/* CANVAS - Camera adjusted for Mobile */}
+      <Canvas 
+        shadows 
+        camera={{ 
+            // If mobile, move camera back (Z: 65) and up (Y: 40) to fit everything
+            position: isMobile ? [0, 40, 65] : [0, 25, 40], 
+            fov: 45 
+        }} 
+        onPointerMissed={handleBackgroundClick}
+        // Essential for mobile touch to rotate 3D instead of scroll page
+        style={{ touchAction: 'none' }} 
+      > 
+        <OrbitControls ref={controlsRef} minDistance={5} maxDistance={150} makeDefault />
         <ambientLight intensity={0.05} />
         <Suspense fallback={null}>
           <StarField />
           <Star settings={starStats} exploded={exploded} setFocus={setFocusTarget} setSelectPlanet={setSelectedPlanet} />
           
           <group key={resetKey}>
-             {/* PLANETS - Now receiving setSelectPlanet */}
              <PlanetarySystem 
                 starScale={starStats.scale} 
                 exploded={exploded} 
@@ -654,10 +742,9 @@ export default function App() {
                 setSelectPlanet={setSelectedPlanet}
              />
              
-             {/* INNER ASTEROID BELT */}
+             {/* Optimization: Reduce asteroid count on mobile if needed via props, 
+                 but keeping it same for now for visual consistency */}
              <AsteroidBelt mass={mass} age={age} exploded={exploded} starScale={starStats.scale} />
-
-             {/* OUTER KUIPER BELT */}
              <KuiperBelt mass={mass} age={age} exploded={exploded} starScale={starStats.scale} />
           </group>
         
