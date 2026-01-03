@@ -781,10 +781,13 @@ export default function App() {
 
       {/* Canvas stays exactly the same */}
       <Canvas 
-        shadows 
-        camera={{ position: isMobile ?  : , fov: 45 }} 
+        shadows
+        camera={{
+          position: isMobile ? [0, 12, 20] : [0, 8, 15],
+          fov: 45
+        }}
         onPointerMissed={handleBackgroundClick}
-        style={{ touchAction: 'none' }} 
+        style={{ touchAction: 'none' }}
       > 
         {/* [Keep your entire Canvas content exactly the same] */}
         <OrbitControls ref={controlsRef} minDistance={5} maxDistance={150} makeDefault />
