@@ -568,8 +568,8 @@ const UIStyles = () => (
       /* Planet Panel (Bottom Sheet) */
       .planet-panel {
         width: 100% !important; 
-        height: 60vh;
-        max-height: 80vh;
+        height: auto;
+        max-height: 90vh;
         right: 0; 
         left: 0; 
         top: auto; 
@@ -581,6 +581,8 @@ const UIStyles = () => (
         padding: 20px 15px;
         touch-action: pan-y;
         -webkit-overflow-scrolling: touch;
+        overflow-y: auto;
+        box-sizing: border-box;
       }
       
       .planet-panel.active { 
