@@ -536,37 +536,130 @@ const UIStyles = () => (
 
     /* --- MOBILE & RESPONSIVE TWEAKS --- */
     @media (max-width: 768px) {
+      /* Base touch improvements */
+      * {
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+      }
+      
       /* Top Left HUD */
       .hud-panel.top-left {
-        top: 10px !important; left: 10px !important; width: auto !important; right: 10px;
-        padding: 15px;
+        top: 5px !important;
+        left: 5px !important;
+        right: 5px;
+        padding: 12px 15px;
+        max-width: calc(100% - 10px);
+        font-size: 0.9em;
       }
-      .hud-panel.top-left .desc-text { display: none; } /* Hide detailed text on mobile to save space */
+      
+      .hud-panel .stat-value {
+        font-size: 1.1em;
+      }
+      
+      .hud-panel.top-left .desc-text { 
+        display: none;
+      }
       
       /* Instructions */
-      .instructions { display: none; }
+      .instructions { 
+        display: none; 
+      }
 
-      /* Planet Panel (Becomes Bottom Sheet) */
+      /* Planet Panel (Bottom Sheet) */
       .planet-panel {
-        width: 100% !important; height: 50vh;
-        right: 0; left: 0; top: auto; bottom: 0;
-        border-right: none; border-top: 3px solid #ff0055;
+        width: 100% !important; 
+        height: 60vh;
+        max-height: 80vh;
+        right: 0; 
+        left: 0; 
+        top: auto; 
+        bottom: 0;
+        border-right: none; 
+        border-top: 3px solid #ff0055;
         transform: translateY(110%);
         border-radius: 20px 20px 0 0;
+        padding: 20px 15px;
+        touch-action: pan-y;
+        -webkit-overflow-scrolling: touch;
       }
-      .planet-panel.active { transform: translateY(0); }
+      
+      .planet-panel.active { 
+        transform: translateY(0);
+        box-shadow: 0 -5px 30px rgba(0,0,0,0.5);
+      }
+      
+      .planet-title {
+        font-size: 1.5em;
+        margin-bottom: 15px;
+      }
+      
+      .data-row {
+        padding: 8px 0;
+      }
 
       /* Bottom Controls */
       .controls-container {
-        width: 95%; bottom: 20px;
+        width: 100%;
+        bottom: 10px;
+        padding: 0 10px;
+        box-sizing: border-box;
       }
+      
       .controls-inner {
-        flex-wrap: wrap; justify-content: center; gap: 15px; padding: 15px;
-        background: rgba(10, 10, 15, 0.9);
+        flex-wrap: wrap; 
+        justify-content: space-between; 
+        gap: 10px; 
+        padding: 12px 15px;
+        background: rgba(10, 10, 15, 0.95);
+        border-radius: 15px;
+        border: 1px solid rgba(255,255,255,0.15);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
       }
-      .control-group { min-width: 40%; flex: 1; }
-      .btn-danger { padding: 0 15px; font-size: 12px; }
-      .btn-reset { display: none; } /* Hide reset on small screens if crowded */
+      
+      .control-group { 
+        min-width: 45%;
+        flex: 1 1 auto;
+        margin: 5px 0;
+      }
+      
+      .btn-control {
+        width: 44px;
+        height: 44px;
+        font-size: 16px;
+      }
+      
+      .btn-danger { 
+        width: 100%;
+        height: 44px;
+        margin-top: 5px;
+        font-size: 14px;
+        border-radius: 22px;
+      }
+      
+      .btn-reset { 
+        display: none;
+      }
+      
+      /* Improve slider touch targets */
+      input[type=range] {
+        height: 24px;
+        margin: 10px 0;
+      }
+      
+      input[type=range]::-webkit-slider-thumb {
+        width: 18px;
+        height: 18px;
+        margin-top: -8px;
+      }
+      
+      /* Prevent zoom on input focus */
+      @media screen and (-webkit-min-device-pixel-ratio:0) {
+        select:focus,
+        textarea:focus,
+        input:focus {
+          font-size: 16px;
+        }
+      }
     }
   `}</style>
 )
