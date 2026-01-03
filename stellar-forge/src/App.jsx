@@ -465,138 +465,163 @@ const UIStyles = () => (
       overscroll-behavior: none; user-select: none; -webkit-user-select: none;
     }
 
-    /* --- DESKTOP BASE (Unchanged) --- */
+    /* BASE STYLES (Desktop + Mobile Foundation) */
     .hud-panel {
-      background: rgba(10, 10, 15, 0.6); backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.1); 
-      border-left: 3px solid #00ffff; padding: 20px; border-radius: 4px; color: white;
-      transition: opacity 0.3s ease;
+      background: rgba(10, 10, 15, 0.85); backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1); padding: 20px; border-radius: 12px; color: white;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
     }
-    .hidden { opacity: 0; pointer-events: none; }
-
-    .planet-panel {
-      background: rgba(10, 10, 15, 0.95); backdrop-filter: blur(20px);
-      border-left: 1px solid rgba(255, 255, 255, 0.1); 
-      border-right: 3px solid #ff0055; padding: 30px; color: white;
-      position: absolute; right: 0; top: 0; bottom: 0; width: 350px;
-      transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-      display: flex; flex-direction: column; z-index: 50; overflow-y: auto;
-    }
-    .planet-panel.active { transform: translateX(0); }
-
-    .controls-container {
-      position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
-      display: flex; gap: 20px; alignItems: flex-end; width: auto; z-index: 40;
-      transition: opacity 0.3s ease;
-    }
-    .controls-inner {
-      display: flex; gap: 30px; padding: 15px 30px; border-radius: 40px; align-items: center;
-    }
-
-    /* Typography */
-    .title-small { font-family: 'Orbitron', sans-serif; font-size: 10px; color: #00ffff; letter-spacing: 2px; margin-bottom: 5px; opacity: 0.8; }
-    .stat-value { font-family: 'Orbitron', sans-serif; font-size: 24px; font-weight: 700; }
-    .planet-title { font-family: 'Orbitron', sans-serif; font-size: 32px; font-weight: 700; color: #ff0055; text-shadow: 0 0 10px rgba(255, 0, 85, 0.4); margin-bottom: 5px; }
-    .desc-text { font-size: 14px; line-height: 1.5; color: #ddd; margin-top: 10px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); }
     
-    /* Stats Layout (Desktop default) */
-    .stats-container { margin-top: 20px; }
-    .data-row { display: flex; justify-content: space-between; margin-top: 12px; padding: 5px 0; border-bottom: 1px dashed rgba(255,255,255,0.1); }
-    .data-label { color: #888; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
-    .data-val { font-family: 'Orbitron'; color: white; font-size: 14px; }
-
-    /* Inputs */
-    input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; margin: 10px 0; }
-    input[type=range]:focus { outline: none; }
-    input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: rgba(255,255,255,0.2); border-radius: 2px; }
-    input[type=range]::-webkit-slider-thumb { height: 20px; width: 20px; border-radius: 50%; background: #00ffff; cursor: pointer; -webkit-appearance: none; margin-top: -8px; box-shadow: 0 0 10px #00ffff; }
+    .title-small { font-family: 'Orbitron', sans-serif; font-size: 11px; color: #00ffff; letter-spacing: 2px; margin-bottom: 8px; opacity: 0.9; }
+    .stat-value { font-family: 'Orbitron', sans-serif; font-size: 28px; font-weight: 700; margin: 0; }
+    .desc-text { font-size: 14px; line-height: 1.5; color: #ddd; margin-top: 12px; }
     
-    .btn-control {
-      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.3); color: white;
-      width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; 
-    }
-    .btn-active { background: #00ffff; color: black; border-color: #00ffff; box-shadow: 0 0 15px rgba(0,255,255,0.4); }
-    .btn-danger { background: linear-gradient(90deg, #aa0000, #ff0000); border: none; color: white; padding: 0 20px; height: 45px; border-radius: 25px; font-weight: bold; cursor: pointer; }
-    
-    .planet-label {
-      color: #00ffff; font-family: 'Orbitron'; font-size: 10px; text-shadow: 0 0 5px black;
-      padding: 4px 8px; background: rgba(0,0,0,0.7); border: 1px solid #00ffff; border-radius: 4px; transform: translateY(-20px);
-    }
-    .control-group { display: flex; flex-direction: column; gap: 5px; min-width: 100px; }
-    .label-control { font-size: 9px; color: #aaa; letter-spacing: 1px; font-weight: bold;}
-    .close-btn { display: none; }
-
-    /* --- MOBILE COMPACT VIEW --- */
-    @media (max-width: 768px) {
-      /* 1. Fix Top Left Cutoff */
-      .hud-panel.top-left {
-        top: 10px !important; 
-        left: 10px !important; 
-        width: auto !important; 
-        max-width: 60vw; /* Prevent off-screen */
-        padding: 8px 12px !important;
-        background: rgba(0,0,0,0.7) !important;
-        border: none !important; border-left: 2px solid #00ffff !important;
-      }
-      .hud-panel.top-left .desc-text { display: none; } 
-      .hud-panel.top-left .title-small { font-size: 9px; margin-bottom: 2px; }
-      .stat-value { font-size: 16px; margin: 0; }
-
-      /* 2. Compact Bottom Planet Panel */
+    /* DESKTOP LAYOUT */
+    @media (min-width: 769px) {
+      .hud-panel.top-left { position: absolute; top: 30px; left: 30px; }
       .planet-panel {
-        width: 100% !important; height: auto !important; 
-        max-height: 50vh; /* Don't cover whole screen */
-        right: 0; left: 0; top: auto; bottom: 0;
-        border-right: none; border-top: 2px solid #ff0055;
-        border-radius: 15px 15px 0 0;
-        transform: translateY(110%);
-        padding: 15px 20px 25px 20px; /* Reduced Padding */
-        box-shadow: 0 -5px 30px rgba(0,0,0,0.9);
+        position: absolute; right: 30px; top: 30px; width: 380px; height: 500px;
+        background: rgba(10, 10, 15, 0.95); border-left: 3px solid #ff0055; padding: 30px;
+        transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
       }
-      .planet-panel.active { transform: translateY(0); }
+      .planet-panel.active { transform: translateX(0); }
+      
+      .controls-container {
+        position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+        display: flex; gap: 25px; align-items: flex-end;
+      }
+      .controls-inner { display: flex; gap: 35px; padding: 20px 35px; border-radius: 50px; }
+      
+      .stats-container { margin-top: 25px; }
+      .data-row { display: flex; justify-content: space-between; margin: 15px 0; padding: 8px 0; border-bottom: 1px dashed rgba(255,255,255,0.1); }
+      .data-label { color: #888; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; }
+      .data-val { font-family: 'Orbitron'; color: white; font-size: 16px; }
+    }
 
-      /* Typography Reduction */
-      .planet-title { font-size: 24px; margin-bottom: 2px; }
-      .desc-text { font-size: 12px; margin-top: 5px; padding-bottom: 10px; line-height: 1.3; border: none;}
-      .title-small { display: none; } /* Hide 'PLANETARY DATABASE' text to save space */
+    /* MOBILE LAYOUT - COMPLETE REDESIGN */
+    @media (max-width: 768px) {
+      /* 1. TOP STATUS - Ultra Compact */
+      .hud-panel.top-left {
+        position: fixed; top: 12px; left: 12px; right: 12px; z-index: 100;
+        padding: 12px 16px !important; border-radius: 16px !important;
+        border-left: 3px solid #00ffff !important; background: rgba(0,0,0,0.85) !important;
+        display: flex; flex-direction: column; gap: 4px; max-width: none;
+      }
+      .top-left .title-small { 
+        font-size: 9px !important; margin-bottom: 2px !important; opacity: 1 !important; 
+      }
+      .top-left .stat-value { 
+        font-size: 20px !important; text-shadow: 0 0 12px currentColor; line-height: 1.1;
+      }
+      .top-left .desc-text { 
+        display: none !important; /* Hide description to save space */
+      }
 
-      /* 3. GRID LAYOUT FOR STATS (Key Change) */
+      /* 2. PLANET PANEL - Bottom Slide-up (Never covers controls) */
+      .planet-panel {
+        position: fixed; left: 12px; right: 12px; bottom: -80vh; z-index: 90;
+        background: rgba(10, 10, 15, 0.98); backdrop-filter: blur(25px);
+        border-top: 3px solid #ff0055; border-radius: 24px 24px 0 0;
+        padding: 24px 20px; max-height: 75vh; overflow-y: auto;
+        transition: bottom 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        box-shadow: 0 -10px 40px rgba(0,0,0,0.8);
+      }
+      .planet-panel.active { bottom: 140px; } /* Leaves space for controls */
+
+      /* 3. CONTROLS - Always Visible, Full Width */
+      .controls-container {
+        position: fixed; bottom: 12px; left: 12px; right: 12px; z-index: 95;
+        display: flex; flex-direction: column; gap: 16px;
+      }
+      .controls-inner {
+        display: flex; flex-direction: column; gap: 20px; padding: 24px;
+        background: rgba(10, 10, 15, 0.95); border-radius: 24px;
+        border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      }
+
+      /* 4. MOBILE TYPOGRAPHY & STATS */
+      .planet-title { 
+        font-family: 'Orbitron', sans-serif; font-size: 28px; font-weight: 700; 
+        color: #ff0055; text-shadow: 0 0 15px rgba(255, 0, 85, 0.6); margin: 8px 0; 
+      }
+      .desc-text { 
+        font-size: 13px; line-height: 1.4; color: #ddd; margin-top: 12px; padding-bottom: 20px;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+      }
+
+      /* Stats: Single Column Cards */
       .stats-container {
-        display: grid;
-        grid-template-columns: 1fr 1fr; /* Two columns */
-        gap: 8px 15px; /* Tight gap */
-        margin-top: 5px;
+        display: flex; flex-direction: column; gap: 12px; margin-top: 20px;
       }
       .data-row {
-        flex-direction: column; /* Label on top of value */
-        align-items: flex-start;
-        border: none;
-        background: rgba(255,255,255,0.05); /* Slight box bg */
-        padding: 8px 10px;
-        border-radius: 6px;
-        margin: 0;
+        background: rgba(255,255,255,0.05); padding: 16px 20px; border-radius: 12px;
+        border: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; gap: 4px;
       }
-      .data-label { font-size: 8px; margin-bottom: 2px; opacity: 0.7; }
-      .data-val { font-size: 13px; }
+      .data-label { 
+        font-size: 10px; color: #88aabb; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 500;
+      }
+      .data-val { 
+        font-family: 'Orbitron'; font-size: 18px; color: white; font-weight: 700;
+      }
 
-      /* Controls */
-      .controls-container { width: 90%; bottom: 20px; }
-      .controls-inner {
-        flex-direction: column; align-items: stretch; gap: 10px; padding: 15px;
-        background: rgba(10, 10, 15, 0.9);
+      /* 5. Mobile Controls */
+      .label-control { 
+        font-size: 11px; color: #aaa; letter-spacing: 1px; font-weight: 600; margin-bottom: 8px;
+        text-align: center;
       }
-      .control-row-1 { display: flex; gap: 10px; }
-      .control-row-2 { margin-top: 5px; }
+      input[type=range] { 
+        width: 100%; height: 6px; background: rgba(255,255,255,0.2); border-radius: 3px;
+        margin: 8px 0; -webkit-appearance: none;
+      }
+      input[type=range]::-webkit-slider-thumb { 
+        height: 28px; width: 28px; border-radius: 50%; background: #00ffff; 
+        cursor: pointer; box-shadow: 0 0 15px #00ffff; margin-top: -11px;
+      }
+      
+      /* Control Value Display */
+      .slider-value { 
+        font-family: 'Orbitron'; font-size: 20px; font-weight: 700; color: #00ffff; 
+        min-width: 45px; text-align: center;
+      }
+
+      /* Buttons */
+      .btn-control {
+        width: 56px; height: 56px; border-radius: 50%; border: none; font-size: 20px;
+        background: rgba(255,255,255,0.1); color: white; cursor: pointer; font-weight: bold;
+        display: flex; align-items: center; justify-content: center;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+        transition: all 0.2s ease;
+      }
+      .btn-control:active { transform: scale(0.95); }
+      .btn-active { background: #00ffff !important; color: #000 !important; box-shadow: 0 0 20px #00ffff; }
+      .btn-danger { 
+        background: linear-gradient(135deg, #ff4444, #ff0000); border: none; 
+        width: 64px; height: 56px; border-radius: 28px; font-size: 16px; font-weight: 700;
+        box-shadow: 0 6px 20px rgba(255,0,0,0.3);
+      }
+      
+      /* Button Row */
+      .btn-row { display: flex; gap: 16px; justify-content: center; }
 
       /* Close Button */
       .close-btn {
-        display: block; position: absolute; top: 12px; right: 12px;
-        background: rgba(255,255,255,0.1); border: none; color: white;
-        width: 28px; height: 28px; border-radius: 50%; font-size: 16px; cursor: pointer; z-index: 60;
+        position: absolute; top: 16px; right: 20px; z-index: 100;
+        width: 36px; height: 36px; border-radius: 50%; border: none;
+        background: rgba(255,255,255,0.15); color: white; font-size: 18px; font-weight: bold;
+        cursor: pointer; display: flex; align-items: center; justify-content: center;
       }
+      .close-btn:active { background: rgba(255,0,0,0.4); }
+    }
+
+    /* Shared Styles */
+    .planet-label {
+      color: #00ffff; font-family: 'Orbitron'; font-size: 11px; text-shadow: 0 0 6px black;
+      padding: 6px 10px; background: rgba(0,0,0,0.8); border: 1px solid #00ffff; 
+      border-radius: 6px; transform: translateY(-25px);
     }
   `}</style>
 )
+
 
 // --- MAIN APP ---
 // ... keep your imports ... 
