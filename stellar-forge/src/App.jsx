@@ -465,16 +465,14 @@ const UIStyles = () => (
       overscroll-behavior: none; user-select: none; -webkit-user-select: none;
     }
 
-    /* --- DESKTOP BASE STYLES --- */
+    /* --- DESKTOP BASE (Unchanged) --- */
     .hud-panel {
       background: rgba(10, 10, 15, 0.6); backdrop-filter: blur(12px);
       border: 1px solid rgba(255, 255, 255, 0.1); 
       border-left: 3px solid #00ffff; padding: 20px; border-radius: 4px; color: white;
-      transition: opacity 0.3s ease, transform 0.3s ease;
+      transition: opacity 0.3s ease;
     }
-    
-    /* Hide element class */
-    .hidden { opacity: 0; pointer-events: none; transform: translateY(-20px); }
+    .hidden { opacity: 0; pointer-events: none; }
 
     .planet-panel {
       background: rgba(10, 10, 15, 0.95); backdrop-filter: blur(20px);
@@ -482,8 +480,7 @@ const UIStyles = () => (
       border-right: 3px solid #ff0055; padding: 30px; color: white;
       position: absolute; right: 0; top: 0; bottom: 0; width: 350px;
       transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-      display: flex; flex-direction: column; z-index: 50;
-      overflow-y: auto;
+      display: flex; flex-direction: column; z-index: 50; overflow-y: auto;
     }
     .planet-panel.active { transform: translateX(0); }
 
@@ -492,22 +489,23 @@ const UIStyles = () => (
       display: flex; gap: 20px; alignItems: flex-end; width: auto; z-index: 40;
       transition: opacity 0.3s ease;
     }
-
     .controls-inner {
       display: flex; gap: 30px; padding: 15px 30px; border-radius: 40px; align-items: center;
     }
 
-    /* Fonts & UI Elements */
+    /* Typography */
     .title-small { font-family: 'Orbitron', sans-serif; font-size: 10px; color: #00ffff; letter-spacing: 2px; margin-bottom: 5px; opacity: 0.8; }
     .stat-value { font-family: 'Orbitron', sans-serif; font-size: 24px; font-weight: 700; }
     .planet-title { font-family: 'Orbitron', sans-serif; font-size: 32px; font-weight: 700; color: #ff0055; text-shadow: 0 0 10px rgba(255, 0, 85, 0.4); margin-bottom: 5px; }
     .desc-text { font-size: 14px; line-height: 1.5; color: #ddd; margin-top: 10px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); }
     
+    /* Stats Layout (Desktop default) */
+    .stats-container { margin-top: 20px; }
     .data-row { display: flex; justify-content: space-between; margin-top: 12px; padding: 5px 0; border-bottom: 1px dashed rgba(255,255,255,0.1); }
     .data-label { color: #888; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
     .data-val { font-family: 'Orbitron'; color: white; font-size: 14px; }
 
-    /* Inputs & Buttons */
+    /* Inputs */
     input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; margin: 10px 0; }
     input[type=range]:focus { outline: none; }
     input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: rgba(255,255,255,0.2); border-radius: 2px; }
@@ -515,15 +513,10 @@ const UIStyles = () => (
     
     .btn-control {
       background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.3); color: white;
-      width: 45px; height: 45px; border-radius: 50%; cursor: pointer;
-      display: flex; align-items: center; justify-content: center; font-size: 16px; 
+      width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; 
     }
     .btn-active { background: #00ffff; color: black; border-color: #00ffff; box-shadow: 0 0 15px rgba(0,255,255,0.4); }
-    .btn-danger {
-      background: linear-gradient(90deg, #aa0000, #ff0000); border: none; color: white;
-      padding: 0 20px; height: 45px; border-radius: 25px; font-family: 'Orbitron', sans-serif;
-      font-weight: bold; cursor: pointer; letter-spacing: 1px; 
-    }
+    .btn-danger { background: linear-gradient(90deg, #aa0000, #ff0000); border: none; color: white; padding: 0 20px; height: 45px; border-radius: 25px; font-weight: bold; cursor: pointer; }
     
     .planet-label {
       color: #00ffff; font-family: 'Orbitron'; font-size: 10px; text-shadow: 0 0 5px black;
@@ -533,47 +526,73 @@ const UIStyles = () => (
     .label-control { font-size: 9px; color: #aaa; letter-spacing: 1px; font-weight: bold;}
     .close-btn { display: none; }
 
-    /* --- MOBILE FIXES --- */
+    /* --- MOBILE COMPACT VIEW --- */
     @media (max-width: 768px) {
-      /* 1. Fix Top Left Panel Cutoff */
+      /* 1. Fix Top Left Cutoff */
       .hud-panel.top-left {
-        top: 15px !important; left: 15px !important; 
-        width: auto !important; max-width: 60vw; /* Prevent screen overflow */
-        padding: 8px 15px !important;
-        background: rgba(0,0,0,0.6) !important;
+        top: 10px !important; 
+        left: 10px !important; 
+        width: auto !important; 
+        max-width: 60vw; /* Prevent off-screen */
+        padding: 8px 12px !important;
+        background: rgba(0,0,0,0.7) !important;
         border: none !important; border-left: 2px solid #00ffff !important;
       }
-      .hud-panel.top-left .desc-text { display: none; } /* Hide description on mobile */
+      .hud-panel.top-left .desc-text { display: none; } 
       .hud-panel.top-left .title-small { font-size: 9px; margin-bottom: 2px; }
-      .stat-value { font-size: 18px; }
+      .stat-value { font-size: 16px; margin: 0; }
 
-      /* 2. Planet Panel - Bottom Overlay */
+      /* 2. Compact Bottom Planet Panel */
       .planet-panel {
-        width: 100% !important; height: auto !important; max-height: 60vh;
+        width: 100% !important; height: auto !important; 
+        max-height: 50vh; /* Don't cover whole screen */
         right: 0; left: 0; top: auto; bottom: 0;
         border-right: none; border-top: 2px solid #ff0055;
-        border-radius: 20px 20px 0 0;
+        border-radius: 15px 15px 0 0;
         transform: translateY(110%);
-        padding: 20px 25px 40px 25px;
-        box-shadow: 0 -10px 50px rgba(0,0,0,0.9);
+        padding: 15px 20px 25px 20px; /* Reduced Padding */
+        box-shadow: 0 -5px 30px rgba(0,0,0,0.9);
       }
       .planet-panel.active { transform: translateY(0); }
 
-      /* 3. Controls - Stick to bottom */
-      .controls-container { width: 90%; bottom: 30px; }
-      
-      .controls-inner {
-        flex-direction: column; align-items: stretch; gap: 15px; padding: 20px;
-        background: rgba(10, 10, 15, 0.9); backdrop-filter: blur(15px);
-        border: 1px solid rgba(255,255,255,0.1);
-      }
-      .control-row-1 { display: flex; gap: 15px; }
-      .control-row-2 { display: flex; justify-content: space-between; align-items: center; margin-top: 5px;}
+      /* Typography Reduction */
+      .planet-title { font-size: 24px; margin-bottom: 2px; }
+      .desc-text { font-size: 12px; margin-top: 5px; padding-bottom: 10px; line-height: 1.3; border: none;}
+      .title-small { display: none; } /* Hide 'PLANETARY DATABASE' text to save space */
 
+      /* 3. GRID LAYOUT FOR STATS (Key Change) */
+      .stats-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* Two columns */
+        gap: 8px 15px; /* Tight gap */
+        margin-top: 5px;
+      }
+      .data-row {
+        flex-direction: column; /* Label on top of value */
+        align-items: flex-start;
+        border: none;
+        background: rgba(255,255,255,0.05); /* Slight box bg */
+        padding: 8px 10px;
+        border-radius: 6px;
+        margin: 0;
+      }
+      .data-label { font-size: 8px; margin-bottom: 2px; opacity: 0.7; }
+      .data-val { font-size: 13px; }
+
+      /* Controls */
+      .controls-container { width: 90%; bottom: 20px; }
+      .controls-inner {
+        flex-direction: column; align-items: stretch; gap: 10px; padding: 15px;
+        background: rgba(10, 10, 15, 0.9);
+      }
+      .control-row-1 { display: flex; gap: 10px; }
+      .control-row-2 { margin-top: 5px; }
+
+      /* Close Button */
       .close-btn {
-        display: block; position: absolute; top: 15px; right: 15px;
+        display: block; position: absolute; top: 12px; right: 12px;
         background: rgba(255,255,255,0.1); border: none; color: white;
-        width: 32px; height: 32px; border-radius: 50%; font-size: 18px; line-height: 1; cursor: pointer; z-index: 60;
+        width: 28px; height: 28px; border-radius: 50%; font-size: 16px; cursor: pointer; z-index: 60;
       }
     }
   `}</style>
@@ -588,6 +607,8 @@ const UIStyles = () => (
 
 // ... keep imports ...
 
+// ... (imports remain the same) ...
+
 export default function App() {
   const [mass, setMass] = useState(1);
   const [age, setAge] = useState(0);
@@ -597,8 +618,6 @@ export default function App() {
   const [focusTarget, setFocusTarget] = useState(null);
   const [selectedPlanet, setSelectedPlanet] = useState(null);
   const [resetKey, setResetKey] = useState(0); 
-  
-  // Mobile Detection
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -642,7 +661,6 @@ export default function App() {
       controlsRef.current?.reset();
   }
 
-  // Helper: Should we hide the main UI? (Yes if on mobile AND a planet is selected)
   const isCleanMode = isMobile && selectedPlanet;
 
   return (
@@ -650,7 +668,7 @@ export default function App() {
       <UIStyles />
       <div style={{ position: 'absolute', zIndex: 10, width: '100%', height: '100%', pointerEvents: 'none' }}>
         
-        {/* SYSTEM STATUS (Removed 'width: 280' and added logic to hide in CleanMode) */}
+        {/* TOP LEFT - System Status (Hides when planet selected) */}
         <div className={`hud-panel top-left ${isCleanMode ? 'hidden' : ''}`} style={{ position: 'absolute' }}>
           <div className="title-small">SYSTEM STATUS</div>
           <div className="stat-value" style={{ color: starStats.color, textShadow: `0 0 15px ${starStats.color}` }}>
@@ -659,7 +677,6 @@ export default function App() {
           <div className="desc-text" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>{starStats.description}</div>
         </div>
 
-        {/* INSTRUCTIONS */}
         <div className="instructions" style={{ position: 'absolute', top: 30, right: 30, textAlign: 'right', opacity: selectedPlanet ? 0 : 0.6, transition: 'opacity 0.5s' }}>
           <div className="title-small" style={{ color: 'white' }}>INSTRUCTIONS</div>
           <div style={{ fontSize: '12px', color: '#ccc' }}>Click Planet to Focus<br/>Click Background to Reset</div>
@@ -670,21 +687,25 @@ export default function App() {
              {selectedPlanet && (
                  <>
                     <button className="close-btn" onClick={closePanel}>✕</button>
-                    <div className="title-small">PLANETARY DATABASE</div>
-                    <div className="planet-title">{selectedPlanet.name}</div>
-                    <div className="desc-text">{selectedPlanet.desc}</div>
+                    {/* Title and Desc */}
+                    <div>
+                        <div className="title-small">PLANETARY DATABASE</div>
+                        <div className="planet-title">{selectedPlanet.name}</div>
+                        <div className="desc-text">{selectedPlanet.desc}</div>
+                    </div>
                     
-                    <div style={{ marginTop: '20px' }}>
+                    {/* DATA STATS - Wrapped in 'stats-container' for Grid Layout */}
+                    <div className="stats-container">
                         <div className="data-row">
-                            <span className="data-label">REAL DIAMETER</span>
+                            <span className="data-label">DIAMETER</span>
                             <span className="data-val">{selectedPlanet.realDiameter}</span>
                         </div>
                         <div className="data-row">
-                            <span className="data-label">AVG TEMP</span>
+                            <span className="data-label">TEMP</span>
                             <span className="data-val">{selectedPlanet.temp}</span>
                         </div>
                         <div className="data-row">
-                            <span className="data-label">DAY LENGTH</span>
+                            <span className="data-label">DAY</span>
                             <span className="data-val">{selectedPlanet.day}</span>
                         </div>
                         <div className="data-row">
@@ -696,11 +717,10 @@ export default function App() {
              )}
         </div>
 
-        {/* CONTROLS (Hidden in CleanMode) */}
+        {/* CONTROLS (Hidden when planet selected on mobile) */}
         <div className={`controls-container ${isCleanMode ? 'hidden' : ''}`}>
           <div className="hud-panel controls-inner" style={{ pointerEvents: 'auto' }}>
             
-            {/* Row 1: Sliders */}
             <div className="control-row-1" style={{ width: '100%', display: 'flex', gap: '20px', flex: 1 }}>
                 <div className="control-group" style={{ flex: 1 }}>
                 <div className="label-control">STAR MASS (M☉)</div>
@@ -719,7 +739,6 @@ export default function App() {
                 </div>
             </div>
 
-            {/* Row 2: Buttons */}
             <div className="control-row-2" style={{ display: 'flex', gap: '15px' }}>
                 <button className={`btn-control ${isPlaying ? 'btn-active' : ''}`} onClick={toggleTime}>
                 {isPlaying ? '⏸' : '▶'}
