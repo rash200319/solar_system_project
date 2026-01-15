@@ -557,9 +557,19 @@ const UIStyles = () => (
     body { 
       margin: 0; 
       font-family: 'Rajdhani', sans-serif; 
-      overflow: hidden; 
+      overflow: hidden;
+      overflow-x: hidden;
+      width: 100vw;
+      max-width: 100%;
+      position: relative;
       /* Prevents pull-to-refresh on mobile */
       overscroll-behavior: none;
+    }
+    
+    html {
+      overflow-x: hidden;
+      width: 100%;
+      max-width: 100%;
     }
 
     /* --- DESKTOP DEFAULTS --- */
@@ -738,17 +748,22 @@ const UIStyles = () => (
       .controls-container {
         position: absolute;
         width: 100% !important;
+        max-width: 100vw !important;
         bottom: 0 !important;
         left: 0 !important;
+        right: 0 !important;
         transform: none !important;
         padding: 0 !important;
+        margin: 0 !important;
         box-sizing: border-box !important;
         display: block !important;
         pointer-events: auto !important;
+        overflow: hidden !important;
       }
       
       .controls-inner {
         width: 100% !important;
+        max-width: 100% !important;
         display: flex !important;
         flex-direction: column !important;
         gap: 10px !important;
@@ -759,31 +774,40 @@ const UIStyles = () => (
         border-bottom: none !important;
         box-shadow: 0 -4px 20px rgba(0,0,0,0.5) !important;
         box-sizing: border-box !important;
+        margin: 0 !important;
       }
       
       .control-group { 
         min-width: 100% !important;
         width: 100% !important;
+        max-width: 100% !important;
         margin: 0 !important;
         gap: 2px !important;
+        box-sizing: border-box !important;
       }
       
       .control-group > div {
         width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
       }
       
       .control-group input[type=range] {
         width: calc(100% - 50px) !important;
+        max-width: calc(100% - 50px) !important;
         margin: 4px 0 !important;
       }
       
+      /* Ensure buttons row doesn't overflow */
       .btn-controls-row {
         display: flex !important;
         justify-content: center !important;
         align-items: center !important;
         gap: 10px !important;
         width: 100% !important;
+        max-width: 100% !important;
         margin-top: 2px !important;
+        box-sizing: border-box !important;
       }
       
       .btn-control {
@@ -793,52 +817,28 @@ const UIStyles = () => (
         flex-shrink: 0 !important;
       }
       
+      /* Single detonate button styling */
       .btn-danger { 
         width: 100% !important;
+        max-width: 100% !important;
         height: 44px !important;
         margin-top: 2px !important;
         font-size: 13px !important;
         border-radius: 22px !important;
         flex-shrink: 0 !important;
+        box-sizing: border-box !important;
       }
       
       .btn-reset { 
         display: none !important;
       }
-      
-      .control-divider {
-        display: none !important;
-      }
-      
-      /* Improve slider touch targets */
-      input[type=range] {
-        height: 28px !important;
-        cursor: pointer !important;
-      }
-      
-      input[type=range]::-webkit-slider-thumb {
-        width: 20px !important;
-        height: 20px !important;
-        margin-top: -9px !important;
-      }
-      
-      input[type=range]::-webkit-slider-runnable-track {
-        height: 3px !important;
-      }
-      
-      /* Prevent zoom on input focus */
-      @media screen and (-webkit-min-device-pixel-ratio:0) {
-        select:focus,
-        textarea:focus,
-        input:focus {
-          font-size: 16px !important;
-        }
-      }
-      
-      /* Better label spacing */
-      .label-control {
-        font-size: 10px !important;
-        margin-bottom: 3px !important;
+
+      /* Ensure body and html don't overflow on mobile */
+      body, html {
+        overflow-x: hidden !important;
+        width: 100vw !important;
+        max-width: 100% !important;
+        position: relative !important;
       }
     }
   `}</style>
@@ -897,9 +897,29 @@ export default function App() {
   }
 
   return (
-    <div style={{ width: "100vw", height: "100vh", background: "black", position: "relative" }}>
+    <div
+      style={{
+        width: "100vw",
+        height: "100vh",
+        maxWidth: "100%",
+        background: "black",
+        position: "relative",
+        overflow: "hidden",
+        overflowX: "hidden",
+      }}
+    >
       <UIStyles />
-      <div style={{ position: "absolute", zIndex: 10, width: "100%", height: "100%", pointerEvents: "none" }}>
+      <div
+        style={{
+          position: "absolute",
+          zIndex: 10,
+          width: "100%",
+          height: "100%",
+          pointerEvents: "none",
+          maxWidth: "100%",
+          overflow: "hidden",
+        }}
+      >
         {/* INFO PANEL (LEFT) */}
         <div className="hud-panel top-left" style={{ position: "absolute", top: 30, left: 30, width: 280 }}>
           <div className="title-small">SYSTEM STATUS // v3.0</div>
@@ -1011,10 +1031,11 @@ export default function App() {
               <button className="btn-control btn-reset" onClick={reset} title="Reset Solar System">
                 RESET
               </button>
-              <button className="btn-danger" onClick={triggerDeath}>
-                DETONATE
-              </button>
             </div>
+
+            <button className="btn-danger" onClick={triggerDeath}>
+              DETONATE
+            </button>
           </div>
         </div>
       </div>
