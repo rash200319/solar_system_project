@@ -639,166 +639,191 @@ const UIStyles = () => (
       /* Top Left HUD - Fixed positioning issues */
       .hud-panel.top-left {
         position: absolute;
-        top: 10px !important;
-        left: 10px !important;
+        top: 5px !important;
+        left: 5px !important;
         right: auto !important;
-        width: calc(100% - 20px);
-        max-width: calc(100% - 20px);
-        padding: 12px 15px;
-        font-size: 0.9em;
-        box-sizing: border-box;
+        width: auto !important;
+        max-width: calc(50% - 10px) !important;
+        padding: 8px 10px !important;
+        font-size: 0.75em !important;
+        box-sizing: border-box !important;
+        z-index: 10 !important;
       }
       
       .hud-panel .stat-value {
-        font-size: 1.3em;
+        font-size: 1.1em !important;
+        margin: 2px 0 !important;
       }
       
       .hud-panel.top-left .desc-text { 
-        font-size: 11px;
-        margin-top: 6px;
+        font-size: 9px !important;
+        margin-top: 4px !important;
+        line-height: 1.2 !important;
+      }
+      
+      .hud-panel .title-small {
+        font-size: 8px !important;
+        margin-bottom: 3px !important;
       }
       
       /* Instructions - Better mobile handling */
       .instructions { 
         position: absolute;
-        top: 10px;
-        right: 10px;
-        font-size: 10px;
-        max-width: 120px;
-        text-align: right;
+        top: 5px !important;
+        right: 5px !important;
+        font-size: 8px !important;
+        max-width: 100px !important;
+        text-align: right !important;
+        padding: 6px 8px !important;
+        background: rgba(10, 10, 15, 0.6) !important;
+        backdrop-filter: blur(8px) !important;
+        border-radius: 3px !important;
+        border: 1px solid rgba(255,255,255,0.1) !important;
+      }
+      
+      .instructions .title-small {
+        font-size: 7px !important;
+        margin-bottom: 2px !important;
+      }
+      
+      .instructions > div:last-child {
+        font-size: 8px !important;
+        line-height: 1.3 !important;
       }
 
       /* Planet Panel (Bottom Sheet) - Improved touch handling */
       .planet-panel {
         width: 100% !important; 
-        height: auto;
-        max-height: 70vh;
+        height: auto !important;
+        max-height: 65vh !important;
         right: 0 !important; 
         left: 0 !important; 
         top: auto !important; 
         bottom: 0 !important;
-        border-right: none; 
-        border-top: 3px solid #ff0055;
-        transform: translateY(100%);
-        border-radius: 20px 20px 0 0;
-        padding: 20px 20px 30px 20px;
-        touch-action: pan-y;
-        -webkit-overflow-scrolling: touch;
-        overflow-y: auto;
-        box-sizing: border-box;
+        border-right: none !important;
+        border-top: 3px solid #ff0055 !important;
+        transform: translateY(100%) !important;
+        border-radius: 20px 20px 0 0 !important;
+        padding: 18px 18px 25px 18px !important;
+        touch-action: pan-y !important;
+        -webkit-overflow-scrolling: touch !important;
+        overflow-y: auto !important;
+        box-sizing: border-box !important;
       }
       
       .planet-panel.active { 
-        transform: translateY(0);
-        box-shadow: 0 -5px 30px rgba(0,0,0,0.7);
+        transform: translateY(0) !important;
+        box-shadow: 0 -5px 30px rgba(0,0,0,0.7) !important;
       }
       
       .planet-title {
-        font-size: 1.8em;
-        margin-bottom: 12px;
+        font-size: 1.6em !important;
+        margin-bottom: 10px !important;
       }
       
       .data-row {
-        padding: 10px 0;
-        margin-top: 12px;
+        padding: 8px 0 !important;
+        margin-top: 10px !important;
       }
       
       .data-label {
-        font-size: 11px;
+        font-size: 10px !important;
       }
       
       .data-val {
-        font-size: 13px;
+        font-size: 12px !important;
       }
 
       /* Bottom Controls - Complete restructure for mobile */
       .controls-container {
         position: absolute;
-        width: 100%;
-        bottom: 0;
-        left: 0;
-        transform: none;
-        padding: 0;
-        box-sizing: border-box;
-        display: block;
+        width: 100% !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        transform: none !important;
+        padding: 0 !important;
+        box-sizing: border-box !important;
+        display: block !important;
+        pointer-events: auto !important;
       }
       
       .controls-inner {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        padding: 15px;
-        background: rgba(10, 10, 15, 0.95);
-        border-radius: 20px 20px 0 0;
-        border: 1px solid rgba(255,255,255,0.15);
-        border-bottom: none;
-        box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
-        box-sizing: border-box;
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+        padding: 12px !important;
+        background: rgba(10, 10, 15, 0.95) !important;
+        border-radius: 15px 15px 0 0 !important;
+        border: 1px solid rgba(255,255,255,0.15) !important;
+        border-bottom: none !important;
+        box-shadow: 0 -4px 20px rgba(0,0,0,0.5) !important;
+        box-sizing: border-box !important;
       }
       
       .control-group { 
-        min-width: 100%;
-        width: 100%;
-        margin: 0;
+        min-width: 100% !important;
+        width: 100% !important;
+        margin: 0 !important;
+        gap: 2px !important;
       }
       
       .control-group > div {
-        width: 100%;
+        width: 100% !important;
       }
       
       .control-group input[type=range] {
-        width: calc(100% - 50px);
+        width: calc(100% - 50px) !important;
+        margin: 4px 0 !important;
       }
       
       .btn-controls-row {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 12px;
-        width: 100%;
-        margin-top: 5px;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        gap: 10px !important;
+        width: 100% !important;
+        margin-top: 2px !important;
       }
       
       .btn-control {
-        width: 48px;
-        height: 48px;
-        font-size: 18px;
-        flex-shrink: 0;
+        width: 44px !important;
+        height: 44px !important;
+        font-size: 16px !important;
+        flex-shrink: 0 !important;
       }
       
       .btn-danger { 
-        width: 100%;
-        height: 48px;
-        margin-top: 5px;
-        font-size: 14px;
-        border-radius: 24px;
-        flex-shrink: 0;
+        width: 100% !important;
+        height: 44px !important;
+        margin-top: 2px !important;
+        font-size: 13px !important;
+        border-radius: 22px !important;
+        flex-shrink: 0 !important;
       }
       
       .btn-reset { 
-        display: none;
+        display: none !important;
       }
       
       .control-divider {
-        display: none;
+        display: none !important;
       }
       
       /* Improve slider touch targets */
       input[type=range] {
-        height: 32px;
-        margin: 8px 0;
-        cursor: pointer;
+        height: 28px !important;
+        cursor: pointer !important;
       }
       
       input[type=range]::-webkit-slider-thumb {
-        width: 22px;
-        height: 22px;
-        margin-top: -10px;
+        width: 20px !important;
+        height: 20px !important;
+        margin-top: -9px !important;
       }
       
       input[type=range]::-webkit-slider-runnable-track {
-        height: 3px;
+        height: 3px !important;
       }
       
       /* Prevent zoom on input focus */
@@ -806,14 +831,14 @@ const UIStyles = () => (
         select:focus,
         textarea:focus,
         input:focus {
-          font-size: 16px;
+          font-size: 16px !important;
         }
       }
       
       /* Better label spacing */
       .label-control {
-        font-size: 11px;
-        margin-bottom: 5px;
+        font-size: 10px !important;
+        margin-bottom: 3px !important;
       }
     }
   `}</style>
